@@ -1,6 +1,7 @@
 import express from "express";
 import tasks from "./routes/tasksRoutes.js";
 import connectDB from "./config/db.js";
+import notFound from "./middleware/not-found.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -8,15 +9,12 @@ const app = express();
 const port = 3000;
 
 // middlewares
+app.use(express.static("./public"));
 app.use(express.json());
 
 // routes
-app.get("/", (req, res) => {
-  res.send("Task Manager App");
-});
-
 app.use("/api/v1/tasks", tasks);
-
+app.use(notFound);
 const start = async () => {
   try {
     await connectDB();
